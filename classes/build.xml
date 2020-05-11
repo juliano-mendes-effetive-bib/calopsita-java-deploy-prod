@@ -1,0 +1,279 @@
+<?xml version="1.0"?>
+<project name="Custo por KM - JAVA" basedir="." default="masterbuildQA">
+	
+	<!--  Load Environment specific properties from properties file -->
+	<property file="build.properties" />
+	<property file="build.number" />
+
+	<target name="initializing" description="Initializes the build">
+		<tstamp/>
+		<echo message="======================================================="/>
+		<echo message="" />
+		<echo message="${application.name} [${TODAY}]"/>
+		<echo message="OS : ${os.name}" />
+		<echo message="Version : ${sprint.number}" />
+		<echo message="" />
+		<echo message="QA Properties:" />
+		<echo message="Bin Dir : ${binQA.dir}" />
+		<echo message="Lib Dir : ${lib.dir}" />
+		<echo message="JDBC Url : ${jdbcQA.url}" />
+		<echo message="JDBC User : ${jdbcQA.user}" />
+		<echo message="" />
+		<echo message="RELEASE Properties:" />
+		<echo message="Bin Dir : ${bin.dir}" />
+		<echo message="Lib Dir : ${lib.dir}" />
+		<echo message="JDBC Url : ${jdbc.url}" />
+		<echo message="JDBC User : ${jdbc.user}" />
+		<echo message="Min Pool Size : ${c3po.MinPoolSize}" />
+		<echo message="Max Pool Size : ${c3po.MaxPoolSize}" />
+		<echo message="Acquire Increment : ${c3po.AcquireIncrement}" />
+		<echo message="" />
+		<echo message="========================================================"/>
+	</target>
+
+	<!-- Increment the build number -->
+	<target name="increment">
+		<echo message="======================================================="/>
+		<echo message="EXECUTE: Increment the build number"/>
+		<echo message="========================================================"/>
+
+		<propertyfile file="build.number" comment="Build Number for ANT. Do not Edit!">
+			<entry key="build.number" type="int" operation="+"  default="1" />
+		</propertyfile>
+		<echo message="New Build Number : ${build.number}" />
+	</target>
+
+	<!-- Clean output dirs -->
+	<target name="cleanRELEASE" description="clean all generated files">
+		<echo message="======================================================="/>
+		<echo message="EXECUTE: Clean old build artifacts"/>
+		<echo message="========================================================"/>
+
+		<delete includeemptydirs="true" verbose="true">
+			<fileset dir="${bin.dir}" includes="**/*" />
+		</delete>
+	</target>
+
+	<!-- SVN Export output dirs -->
+	<target name="exportRELEASE" description="export SVN DEV to Trunk">
+		<echo message="======================================================="/>
+		<echo message="EXECUTE: Export DEV to TRUNK build artifacts"/>
+		<echo message="========================================================"/>
+		<echo message=""/>
+
+		<echo message="1. DELETING : ${export.dir}"/>
+		<delete includeemptydirs="true" verbose="false" failonerror="false">
+			<fileset dir="${export.dir}" includes="**/*" />
+		</delete>
+
+		<echo message="2. DELETING : ${export.trunkdir}"/>
+		<delete includeemptydirs="true" verbose="false" failonerror="false">
+			<fileset dir="${export.trunkdir}" includes="**/*" />
+		</delete>
+		
+		<echo message="3. SVN : Export Project (DEV) : ${export.DEV} TO ${export.dir}"/>
+		<exec executable="${svn.path}" dir="." failonerror="true">
+			<arg line="export ${export.DEV} ${export.dir} --username ${svn.username} --password ${svn.password} --force "/>
+		</exec>
+
+		<echo message="4. SVN : UPDATE Project (TRUNK) : ${export.TRUNK} TO ${export.trunkdir}"/>
+		<exec executable="${svn.path}" dir="." failonerror="true">
+	    	<arg line="checkout ${export.TRUNK} ${export.trunkdir} --username ${svn.username} --password ${svn.password} --force " />
+		</exec>
+		
+		<echo message="5. COPY Folder Content : ${export.dir} TO ${export.trunkdir}"/>
+		<copy todir="${export.trunkdir}" verbose="false" overwrite="true" >
+			<fileset dir="${export.dir}" includes="**/*" />
+		</copy>
+
+		<echo message="6. SVN : ADD new files to (TRUNK)"/>
+		<exec executable="${svn.path}" dir="${export.trunkdir}" failonerror="true" >
+			<arg line='add * --force '/>
+		</exec>
+
+		<echo message="7. SVN : COMMIT changes to (TRUNK)"/>
+		<exec executable="${svn.path}" dir="${export.trunkdir}" failonerror="true" >
+			<arg line='commit -m "FULL RELEASE DEPLOY : ${sprint.number} " --username ${svn.username} --password ${svn.password} '/>
+		</exec>
+		
+		<echo message="8. COPY Folder Content : ${export.trunkdir} TO WorkspaceFolder"/>
+		<copy todir="." verbose="true" overwrite="true">
+			<fileset dir="${export.trunkdir}" includes="**/*" excludesfile="build.number" />
+		</copy>
+		
+	</target>	
+	
+	<!-- Compile Main application -->
+	<target name="compileRELEASE" depends="initializing" description="Compiles the java source files">
+		<echo message="======================================================="/>
+		<echo message="EXECUTE: Compiling JAVA Project"/>
+		<echo message="========================================================"/>
+
+		<mkdir dir="${bin.dir}/classes" />
+		<javac srcdir="${src.dir}" destdir="${bin.dir}/classes" encoding="iso-8859-1">
+			<classpath>
+				<fileset dir="${src.dir}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>  
+		</javac>
+	</target>
+
+	<!-- Create Java wrapper -->
+	<target name="deployRELEASE" depends="compileRELEASE" description="Moving and editing files">
+
+		<echo message="======================================================="/>
+		<echo message="EXECUTE: Deploying new build artifacts"/>
+		<echo message="========================================================"/>
+
+		<copy file="${src.dir}/flex/messaging-config.xml" todir="${bin.dir}/flex" />
+		<copy file="${src.dir}/flex/proxy-config.xml" todir="${bin.dir}/flex" />
+		<copy file="${src.dir}/flex/remoting-config.xml" todir="${bin.dir}/flex" />
+		<copy file="${src.dir}/flex/services-config.xml" todir="${bin.dir}/flex" />
+		<copy file="${src.dir}/flex/web.xml" todir="${bin.dir}" />
+		<copy file="${src.dir}/cpk.properties" todir="${bin.dir}/classes" />
+		<copy file="${src.dir}/log4j.properties" todir="${bin.dir}/classes" />
+		<copy file="${basedir}/build.number" todir="${bin.dir}/classes" />
+
+		<copy todir="${bin.dir}/lib">
+			<fileset dir="${src.dir}/lib">		
+			</fileset>
+		</copy>
+
+		<delete includeemptydirs="true" verbose="true">
+			<fileset dir="${basedir}" includes="${zip.filename}" />
+		</delete>
+
+		<!-- Replace placeholders in the html with our variables -->
+		<!-- Check the flex version_major, version_minor, version_revision -->
+		<replaceregexp file="${bin.dir}/flex/config.xml" flags="gs" match="${ckfinder.url}" replace="${ckfinderPROD.url}"/>
+
+		<replaceregexp file="${bin.dir}/classes/cpk.properties" flags="gs" match="jdbc.url=${jdbcDEV.url}" replace="jdbc.url=${jdbc.url}"/>
+		<replaceregexp file="${bin.dir}/classes/cpk.properties" flags="gs" match="jdbc.user=${jdbcDEV.user}" replace="jdbc.user=${jdbc.user}"/>
+		<replaceregexp file="${bin.dir}/classes/cpk.properties" flags="gs" match="jdbc.password=${jdbcDEV.password}" replace="jdbc.password=${jdbc.password}"/>
+		<replaceregexp file="${bin.dir}/classes/cpk.properties" flags="gs" match="log.level=${logDEV.level}" replace="log.level=${log.level}"/>
+		<replaceregexp file="${bin.dir}/classes/cpk.properties" flags="gs" match="c3po.MinPoolSize=${c3poDEV.MinPoolSize}" replace="c3po.MinPoolSize=${c3po.MinPoolSize}"/>
+		<replaceregexp file="${bin.dir}/classes/cpk.properties" flags="gs" match="c3po.MaxPoolSize=${c3poDEV.MaxPoolSize}" replace="c3po.MaxPoolSize=${c3po.MaxPoolSize}"/>
+		<replaceregexp file="${bin.dir}/classes/cpk.properties" flags="gs" match="c3po.AcquireIncrement=${c3poDEV.AcquireIncrement}" replace="c3po.AcquireIncrement=${c3po.AcquireIncrement}"/>
+
+		<replaceregexp file="${bin.dir}/classes/cpk.properties" flags="gs" match="jdbc.mysql.url=${jdbcDEV.mysql.url}" replace="jdbc.mysql.url=${jdbc.mysql.url}"/>
+		<replaceregexp file="${bin.dir}/classes/cpk.properties" flags="gs" match="jdbc.mysql.user=${jdbcDEV.mysql.user}" replace="jdbc.mysql.user=${jdbc.mysql.user}"/>
+		<replaceregexp file="${bin.dir}/classes/cpk.properties" flags="gs" match="jdbc.mysql.password=${jdbcDEV.mysql.password}" replace="jdbc.mysql.password=${jdbc.mysql.password}"/>
+		<replaceregexp file="${bin.dir}/classes/cpk.properties" flags="gs" match="c3po.mysql.MinPoolSize=${c3poDEV.mysql.MinPoolSize}" replace="c3po.mysql.MinPoolSize=${c3po.mysql.MinPoolSize}"/>
+		<replaceregexp file="${bin.dir}/classes/cpk.properties" flags="gs" match="c3po.mysql.MaxPoolSize=${c3poDEV.mysql.MaxPoolSize}" replace="c3po.mysql.MaxPoolSize=${c3po.mysql.MaxPoolSize}"/>
+		<replaceregexp file="${bin.dir}/classes/cpk.properties" flags="gs" match="c3po.mysql.AcquireIncrement=${c3poDEV.mysql.AcquireIncrement}" replace="c3po.mysql.AcquireIncrement=${c3po.mysql.AcquireIncrement}"/>
+		
+	</target>
+
+	<!-- Clean output dirs -->
+	<target name="cleanQA" description="clean all generated files">
+		<echo message="======================================================="/>
+		<echo message="EXECUTE: Clean old build artifacts"/>
+		<echo message="========================================================"/>
+
+		<delete includeemptydirs="true" verbose="true">
+			<fileset dir="${binQA.dir}" includes="**/*" />
+		</delete>
+	</target>
+
+	<target name="compileQA" depends="initializing" description="Compiles the mxml/as source files">
+		<echo message="======================================================="/>
+		<echo message="EXECUTE: Compiling JAVA Project"/>
+		<echo message="========================================================"/>
+
+		<mkdir dir="${binQA.dir}/classes" />
+		 <javac srcdir="${src.dir}" destdir="${binQA.dir}/classes" encoding="iso-8859-1">
+		 	<classpath>  
+		 	                <fileset dir="${src.dir}/lib">  
+		 	                    <include name="**/*.jar" />  
+		 	                </fileset>  
+			</classpath>  
+		 </javac>
+	</target>
+
+	<!-- Create HTML wrapper -->
+	<target name="deployQA" depends="compileQA" description="Moving and editing files">
+
+		<echo message="======================================================="/>
+		<echo message="EXECUTE: Deploying new build artifacts"/>
+		<echo message="========================================================"/>
+
+		<copy file="${src.dir}/flex/messaging-config.xml" todir="${binQA.dir}/flex" />
+		<copy file="${src.dir}/flex/proxy-config.xml" todir="${binQA.dir}/flex" />
+		<copy file="${src.dir}/flex/remoting-config.xml" todir="${binQA.dir}/flex" />
+		<copy file="${src.dir}/flex/services-config.xml" todir="${binQA.dir}/flex" />
+		<copy file="${src.dir}/flex/web.xml" todir="${binQA.dir}" />
+		<copy file="${src.dir}/cpk.properties" todir="${binQA.dir}/classes" />
+		<copy file="${src.dir}/log4j.properties" todir="${binQA.dir}/classes" />
+		<copy file="${basedir}/build.number" todir="${binQA.dir}/classes" />
+
+		<copy todir="${binQA.dir}/lib">
+			<fileset dir="${src.dir}/lib">		
+			</fileset>
+		</copy>
+
+		<!-- Replace placeholders in the html with our variables -->
+		<!-- Check the flex version_major, version_minor, version_revision -->
+		<replaceregexp file="${binQA.dir}/flex/config.xml" flags="gs" match="${ckfinder.url}" replace="${ckfinderQA.url}"/>
+
+		<replaceregexp file="${binQA.dir}/classes/cpk.properties" flags="gs" match="jdbc.url=${jdbcDEV.url}" replace="jdbc.url=${jdbcQA.url}"/>
+		<replaceregexp file="${binQA.dir}/classes/cpk.properties" flags="gs" match="jdbc.user=${jdbcDEV.user}" replace="jdbc.user=${jdbcQA.user}"/>
+		<replaceregexp file="${binQA.dir}/classes/cpk.properties" flags="gs" match="jdbc.password=${jdbcDEV.password}" replace="jdbc.password=${jdbcQA.password}"/>
+		<replaceregexp file="${binQA.dir}/classes/cpk.properties" flags="gs" match="log.level=${logDEV.level}" replace="log.level=${logQA.level}"/>
+		<replaceregexp file="${binQA.dir}/classes/cpk.properties" flags="gs" match="c3po.MinPoolSize=${c3poDEV.MinPoolSize}" replace="c3po.MinPoolSize=${c3poQA.MinPoolSize}"/>
+		<replaceregexp file="${binQA.dir}/classes/cpk.properties" flags="gs" match="c3po.MaxPoolSize=${c3poDEV.MaxPoolSize}" replace="c3po.MaxPoolSize=${c3poQA.MaxPoolSize}"/>
+		<replaceregexp file="${binQA.dir}/classes/cpk.properties" flags="gs" match="c3po.AcquireIncrement=${c3poDEV.AcquireIncrement}" replace="c3po.AcquireIncrement=${c3poQA.AcquireIncrement}"/>
+
+		<replaceregexp file="${binQA.dir}/classes/cpk.properties" flags="gs" match="jdbc.mysql.url=${jdbcDEV.mysql.url}" replace="jdbc.mysql.url=${jdbcQA.mysql.url}"/>
+		<replaceregexp file="${binQA.dir}/classes/cpk.properties" flags="gs" match="jdbc.mysql.user=${jdbcDEV.mysql.user}" replace="jdbc.mysql.user=${jdbcQA.mysql.user}"/>
+		<replaceregexp file="${binQA.dir}/classes/cpk.properties" flags="gs" match="jdbc.mysql.password=${jdbcDEV.mysql.password}" replace="jdbc.mysql.password=${jdbcQA.mysql.password}"/>
+		<replaceregexp file="${binQA.dir}/classes/cpk.properties" flags="gs" match="c3po.mysql.MinPoolSize=${c3poDEV.mysql.MinPoolSize}" replace="c3po.mysql.MinPoolSize=${c3poQA.mysql.MinPoolSize}"/>
+		<replaceregexp file="${binQA.dir}/classes/cpk.properties" flags="gs" match="c3po.mysql.MaxPoolSize=${c3poDEV.mysql.MaxPoolSize}" replace="c3po.mysql.MaxPoolSize=${c3poQA.mysql.MaxPoolSize}"/>
+		<replaceregexp file="${binQA.dir}/classes/cpk.properties" flags="gs" match="c3po.mysql.AcquireIncrement=${c3poDEV.mysql.AcquireIncrement}" replace="c3po.mysql.AcquireIncrement=${c3poQA.mysql.AcquireIncrement}"/>
+		
+	</target>
+
+	<!-- Load the tasks for compiling the actionScript code and running flexUnit -->
+	<taskdef name="deployTomcatLib" classname="org.apache.catalina.ant.DeployTask"> 
+		<classpath><path location="${src.dir}/lib/catalina-ant.jar"/></classpath>
+	 </taskdef>
+	<taskdef name="undeployTomcatLib" classname="org.apache.catalina.ant.UndeployTask"> 
+		<classpath><path location="${src.dir}/lib/catalina-ant.jar"/></classpath>
+	 </taskdef>
+	<taskdef name="reloadTomcatLib" classname="org.apache.catalina.ant.ReloadTask"> 
+		<classpath><path location="${src.dir}/lib/catalina-ant.jar"/></classpath>
+	 </taskdef>
+	<taskdef name="startTomcatLib" classname="org.apache.catalina.ant.StartTask"> 
+		<classpath><path location="${src.dir}/lib/catalina-ant.jar"/></classpath>
+	 </taskdef>
+	<taskdef name="stopTomcatLib" classname="org.apache.catalina.ant.StopTask"> 
+		<classpath><path location="${src.dir}/lib/catalina-ant.jar"/></classpath>
+	 </taskdef>
+	
+	<!-- Control Tomcat -->
+	<target name="tomcat-start"><java jar="c:/Server/tomcat/bin/bootstrap.jar" fork="true"><jvmarg value="-Dcatalina.home=c:/Server/tomcat"/></java></target>
+	<target name="tomcat-stop"><java jar="c:/Server/tomcat/bin/bootstrap.jar" fork="true"><jvmarg value="-Dcatalina.home=c:/Server/tomcat"/><arg line="stop"/></java><sleep seconds="10"/></target>
+	
+	<!-- Undeploy and Deploy context in Tomcat -->
+	<target name="stopTomcatQA" description="undeploy from tomcat">
+		<stopTomcatLib failonerror="no" url="${tomcat.manager}" username="${tomcat.user}" password="${tomcat.password}" path="${tomcat.context}"/>
+	</target>
+	<target name="startTomcatQA" description="deploy from tomcat">
+		<startTomcatLib failonerror="no" url="${tomcat.manager}" username="${tomcat.user}" password="${tomcat.password}" path="${tomcat.context}"/>
+	</target>
+
+	<!-- ZIP tasks -->
+	<target name="zipRELEASE" description="zip all files">
+		<zip destfile="${basedir}/${zip.filename}"
+		       basedir="${bin.dir}" />
+	</target>
+
+	<!-- Run all -->
+
+	<target name="ONLY_RELEASE" depends="cleanRELEASE, exportRELEASE, increment, compileRELEASE, deployRELEASE" description="Complete build in efficient sequence"/>
+	<target name="RELEASE_And_DEPLOY" depends="cleanRELEASE, exportRELEASE, increment, compileRELEASE, deployRELEASE, zipRELEASE" description="Complete build in efficient sequence"/>
+
+	<!-- Run all, default -->
+	<target name="masterbuildQA" depends="stopTomcatQA, cleanQA, increment, compileQA, deployQA, startTomcatQA" description="Complete QA build in efficient sequence"/>
+
+</project>

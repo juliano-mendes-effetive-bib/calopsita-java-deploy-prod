@@ -1,0 +1,946 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service id="remoting-service" class="flex.messaging.services.RemotingService">
+	<adapters>
+		<adapter-definition id="java-object"
+			class="flex.messaging.services.remoting.adapters.JavaAdapter"
+			default="true" />
+	</adapters>
+	<default-channels>
+		<channel ref="my-amf" />
+	</default-channels>
+	<destination id="fileControlDestination">
+		<properties>
+			<source>com.effetive.cpk.control.FileControl
+			</source>
+		</properties>
+	</destination>
+	<destination id="userDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UserDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="parameterDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ParameterDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="indicatorDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.IndicatorDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="indGroupIndicatorDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.IndGroupIndicatorDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="indicatorGroupDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.IndicatorGroupDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="datasourceDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DatasourceDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="connectorDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ConnectorDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="alertProfileDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.AlertProfileDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="dashboardExecutionDestination">
+		<properties>
+			<source>com.effetive.cpk.control.DashboardExecutionService
+			</source>
+		</properties>
+	</destination>
+	<destination id="roleDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.RoleDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="privilegeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.PrivilegeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="functionalityDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.FunctionalityDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="userRoleDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UserRoleDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="rolePrivilegeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.RolePrivilegeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="privilegeFunctionalityDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.PrivilegeFunctionalityDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tableStructureDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TableStructureDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="customerDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.CustomerDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="functionalityRoleDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.FunctionalityRoleDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="zoneDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ZoneDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="countryDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.CountryDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="cityDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.CityDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="productLineDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ProductLineDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="productTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ProductTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="regionalDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.RegionalDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="territoryDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TerritoryDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="productDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ProductDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="contactTopicDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ContactTopicDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="productGroupDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ProductGroupDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="productGroupProductDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ProductGroupProductDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="uploadFileDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UploadFileDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="userTerritoryDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UserTerritoryDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="occupationDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.OccupationDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="dynamicDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DynamicDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="newsCategoryDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.NewsCategoryDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="newsDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.NewsDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="newsAttachmentDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.NewsAttachmentDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="newsCommentDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.NewsCommentDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="newsRoleDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.NewsRoleDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="newsRegionalDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.NewsRegionalDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="userProductLineDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UserProductLineDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="newsProductLineDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.NewsProductLineDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="productCategoryDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ProductCategoryDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="productMarketDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ProductMarketDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="customerCategoryDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.CustomerCategoryDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="reportDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ReportDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="reportHistoryDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ReportHistoryDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="reportParameterDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ReportParameterDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="reportRoleDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ReportRoleDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="reportManagerDestination">
+		<properties>
+			<source>com.effetive.cpk.control.ReportManager
+			</source>
+		</properties>
+	</destination>
+	<destination id="reportAttachmentDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ReportAttachmentDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="menuDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.MenuDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="ticketDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TicketDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="ticketConclusionTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TicketConclusionTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="businessActivityDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.BusinessActivityDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="reportHistoryLogDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ReportHistoryLogDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="logImportFileDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.LogImportFileDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="logImportErrorDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.LogImportErrorDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="contactListDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ContactListDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="messageDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.MessageDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="userTraceDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UserTraceDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="dashboardLayoutDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DashboardLayoutDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="helperDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.HelperDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="helperItemsDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.HelperItemsDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="logCategoryDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.LogCategoryDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="logClassDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.LogClassDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="releaseNoteDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ReleaseNoteDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="releaseNoteItemsDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ReleaseNoteItemsDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="logContentDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.LogContentDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="moduleAdministratorDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ModuleAdministratorDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="dbEntityDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DbEntityDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="dbObjectsDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DbObjectsDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="dbEntityConstraintDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DbEntityConstraintDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="dbEntityColumnsDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DbEntityColumnsDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="themeColorDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ThemeColorDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="themeColorItemDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ThemeColorItemDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="datasourceColumnDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DatasourceColumnDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="accessLogDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.AccessLogDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="zipCityDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ZipCityDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="zipStateDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ZipStateDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="zipDistrictDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ZipDistrictDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="zipStreetDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ZipStreetDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="userTerritoryResponsibleDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UserTerritoryResponsibleDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="vehicleBrandDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.VehicleBrandDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="vehicleTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.VehicleTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="vehicleModelDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.VehicleModelDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="freightTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.FreightTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tireDimensionDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireDimensionDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tireSculptureDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireSculptureDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="damageGroupDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DamageGroupDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="damageDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DamageDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="userDamageGroupDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UserDamageGroupDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tireExamTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireExamTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="customerSegmentDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.CustomerSegmentDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tireManufacturerDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireManufacturerDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="visitPlanDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.VisitPlanDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="userTireExamTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UserTireExamTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="customerContactDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.CustomerContactDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="mountingPositionDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.MountingPositionDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="logSyncDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.LogSyncDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="examConclusionTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ExamConclusionTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="usageSegmentDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UsageSegmentDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="userSegmentDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UserSegmentDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="logSyncItemDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.LogSyncItemDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="scriptControlDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ScriptControlDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="deviceControlDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DeviceControlDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="userSegmentVehicleTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UserSegmentVehicleTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="visitTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.VisitTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tireDismountingTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireDismountingTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="damageCauseDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DamageCauseDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="visitAdviceDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.VisitAdviceDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="versionControlDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.VersionControlDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="damageAdviceDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DamageAdviceDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tireExamTypeVisitTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireExamTypeVisitTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="customerTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.CustomerTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tireBrandDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireBrandDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tirePositionDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TirePositionDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tirePositionProductLineDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TirePositionProductLineDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="vehicleBodyTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.VehicleBodyTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="loadTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.LoadTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="conclusionReasonDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ConclusionReasonDAO
+			</source>
+		</properties>
+	</destination>
+
+	<destination id="cancellationReasonDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.CancellationReasonDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tireGamaDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireGamaDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tireGamaCustomerTypeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireGamaCustomerTypeDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tireSculptureProductLineDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireSculptureProductLineDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="vinhetaDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.VinhetaDAO
+			</source>
+		</properties>
+	</destination>
+
+	<destination id="languageDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.LanguageDAO
+			</source>
+		</properties>
+	</destination>
+
+	<destination id="tireConstructionDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireConstructionDAO
+			</source>
+		</properties>
+	</destination>
+
+	<destination id="tireConstructionProductLineDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireConstructionProductLineDAO
+			</source>
+		</properties>
+	</destination>
+	<destination id="tireDimensionSculptureDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireDimensionSculptureDAO
+			</source>
+		</properties>
+	</destination>
+
+
+<destination id="vehicleConfigurationDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.VehicleConfigurationDAO
+			</source>
+		</properties>
+	</destination>
+	
+	<destination id="microRegionDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.MicroRegionDAO
+			</source>
+		</properties>
+	</destination>
+	
+	<destination id="userMicroRegionDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UserMicroRegionDAO
+			</source>
+		</properties>
+	</destination>
+	
+	<destination id="userRegionalDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.UserRegionalDAO
+			</source>
+		</properties>
+	</destination>
+	
+	<destination id="currencyDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.CurrencyDAO
+			</source>
+		</properties>
+	</destination>
+
+	<destination id="acompeDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.AcompeDAO
+			</source>
+		</properties>
+	</destination>
+
+
+	
+	<destination id="acompeTireDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.AcompeTireDAO
+			</source>
+		</properties>
+	</destination>
+	
+	<destination id="acompeAttachmentDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.AcompeAttachmentDAO
+			</source>
+		</properties>
+	</destination>
+	
+	
+	<destination id="acompeTireHistoryDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.AcompeTireHistoryDAO
+			</source>
+		</properties>
+	</destination>
+	
+
+	
+	<destination id="customerVehicleDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.CustomerVehicleDAO
+			</source>
+		</properties>
+	</destination>
+
+	<destination id="tireDimensionProductLineDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireDimensionProductLineDAO</source>
+		</properties>
+	</destination>
+	
+  <destination id="tireDimensionCountryDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireDimensionCountryDAO</source>
+		</properties>
+	</destination>
+	
+  <destination id="marketSegmentDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.MarketSegmentDAO</source>
+		</properties>
+	</destination>
+
+	
+	
+	  <destination id="currencyCountryDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.CurrencyCountryDAO</source>
+		</properties>
+	</destination>
+
+	
+  <destination id="tireGamaProductLineDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.TireGamaProductLineDAO</source>
+		</properties>
+	</destination>
+	
+	<destination id="examProductDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.ExamProductDAO</source>
+		</properties>
+	</destination>
+
+	<destination id="acompeVehicleDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.AcompeVehicleDAO
+			</source>
+		</properties>
+	</destination>
+	
+	<destination id="acompeAxisDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.AcompeAxisDAO
+			</source>
+		</properties>
+	</destination>
+
+	<destination id="pressionMovDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.PressionMovDAO
+			</source>
+		</properties>
+	</destination>
+	
+	<destination id="weighingMovDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.WeighingMovDAO
+			</source>
+		</properties>
+	</destination>
+			
+	<destination id="dnitClassificationDestination">
+		<properties>
+			<source>com.effetive.cpk.dao.DnitClassificationDAO
+			</source>
+		</properties>
+	</destination>
+			
+</service>

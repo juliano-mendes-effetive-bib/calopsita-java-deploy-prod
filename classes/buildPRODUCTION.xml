@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<project name="Custo por KM - JAVA" basedir="." default="releasebuild">
+	
+	<!--  Load Environment specific properties from properties file -->
+	<property file="build.properties" />
+
+	<target name="initializing" description="Initializes the build">
+		<tstamp/>
+		<echo message="======================================================="/>
+		<echo message="" />
+		<echo message="${application.name} [${TODAY}]"/>
+		<echo message="OS : ${os.name}" />
+		<echo message="" />
+		<echo message="RELEASE Properties:" />
+		<echo message="Bin Dir : ${bin.dir}" />
+		<echo message="Src Dir : ${src.dir}" />
+		<echo message="" />
+		<echo message="========================================================"/>
+	</target>
+
+	<!-- Clean output dirs -->
+	<target name="clean" description="clean all generated files">
+		<echo message="======================================================="/>
+		<echo message="EXECUTE: Clean old build artifacts"/>
+		<echo message="========================================================"/>
+
+		<delete includeemptydirs="true" verbose="true">
+			<fileset dir="${src.dir}" includes="**/*" />
+		</delete>
+	</target>
+
+	<!-- Load the tasks for compiling the actionScript code and running flexUnit -->
+	<taskdef name="deployTomcatLib" classname="org.apache.catalina.ant.DeployTask"> 
+		<classpath><path location="${src.dir}/lib/catalina-ant.jar"/></classpath>
+	 </taskdef>
+	<taskdef name="undeployTomcatLib" classname="org.apache.catalina.ant.UndeployTask"> 
+		<classpath><path location="${src.dir}/lib/catalina-ant.jar"/></classpath>
+	 </taskdef>
+	<taskdef name="reloadTomcatLib" classname="org.apache.catalina.ant.ReloadTask"> 
+		<classpath><path location="${src.dir}/lib/catalina-ant.jar"/></classpath>
+	 </taskdef>
+	<taskdef name="startTomcatLib" classname="org.apache.catalina.ant.StartTask"> 
+		<classpath><path location="${src.dir}/lib/catalina-ant.jar"/></classpath>
+	 </taskdef>
+	<taskdef name="stopTomcatLib" classname="org.apache.catalina.ant.StopTask"> 
+		<classpath><path location="${src.dir}/lib/catalina-ant.jar"/></classpath>
+	 </taskdef>
+	
+	<!-- Undeploy and Deploy context in Tomcat -->
+	<target name="stopTomcat" description="undeploy from tomcat">
+		<stopTomcatLib failonerror="no" url="${tomcat.manager}" username="${tomcat.user}" password="${tomcat.password}" path="${tomcat.context}"/>
+	</target>
+	<target name="startTomcat" description="deploy from tomcat">
+		<startTomcatLib failonerror="no" url="${tomcat.manager}" username="${tomcat.user}" password="${tomcat.password}" path="${tomcat.context}"/>
+	</target>
+
+	
+	<!-- Create Java wrapper -->
+	<target name="deploy" depends="initializing" description="Moving and editing files">
+
+		<echo message="======================================================="/>
+		<echo message="EXECUTE: Deploying new build artifacts"/>
+		<echo message="========================================================"/>
+
+		<unzip src="${src.dir}/${zip.filename}"
+		       dest="${zip.destination}"/>
+
+	</target>
+
+	<!-- Create Java wrapper -->
+	<target name="deployFiles" description="Moving and editing files">
+
+		<echo message="======================================================="/>
+		<echo message="EXECUTE: Deploying new build artifacts"/>
+		<echo message="========================================================"/>
+
+		<copy todir="${bin.dir}" overwrite="yes" force="yes">
+			<fileset dir="${zip.destination}">		
+			</fileset>
+		</copy>
+
+	</target>
+
+	<!-- Run all, default -->
+	<target name="releasebuild" depends="deploy, stopTomcat, deployFiles, startTomcat, clean" description="Full release"/>
+
+</project>
